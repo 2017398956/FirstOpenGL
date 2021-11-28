@@ -19,6 +19,9 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
         private const val POSITION_COMPONENT_COUNT = 2
         private const val BYTES_PER_FLOAT = 4
         private const val U_COLOR = "u_Color"
+        private const val A_COLOR = "a_Color"
+        private const val COLOR_COMPONENT_COUNT = 3
+        private const val STRIDE = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * BYTES_PER_FLOAT
         private const val A_POSITION = "a_Position"
         private const val U_MATRIX = "u_Matrix"
     }
@@ -33,18 +36,18 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
 //        0.5f, -0.5f,
 //        0.5f, 0.5f,
         // 绘制三角扇
-        0f, 0f,
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5f, 0.5f,
-        -0.5f, -0.5f,
+        0f, 0f, 1f , 1f , 1f ,
+        -0.5f, -0.5f, 0.7f , 0.7f ,0.7f ,
+        0.5f, -0.5f,0.7f , 0.7f ,0.7f ,
+        0.5f, 0.5f,0.7f , 0.7f ,0.7f ,
+        -0.5f, 0.5f,0.7f , 0.7f ,0.7f ,
+        -0.5f, -0.5f,0.7f , 0.7f ,0.7f ,
         // line
-        - 0.5f, 0f,
-        0.5f, 0f,
+        - 0.5f, 0f, 1f , 0f , 0f ,
+        0.5f, 0f, 1f , 0f , 0f ,
         // 点
-        0f, -0.25f,
-        0f, 0.25f
+        0f, -0.25f, 0f , 0f , 1f ,
+        0f, 0.25f , 1f , 0f , 0f
     )
 
     private val vertexData: FloatBuffer =
@@ -53,6 +56,7 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
 
     private var uColorPositionLocation = 0
     private var aPositionLocation = 0
+    private var aColorLocation = 0
     private var uMatrixLocation = 0
     private val projectionMatrix = FloatArray(16)
 
@@ -73,17 +77,25 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
         GLES20.glUseProgram(programObjectId)
         uColorPositionLocation = GLES20.glGetUniformLocation(programObjectId, U_COLOR)
         aPositionLocation = GLES20.glGetAttribLocation(programObjectId, A_POSITION)
+        aColorLocation = GLES20.glGetAttribLocation(programObjectId , A_COLOR)
         uMatrixLocation = GLES20.glGetUniformLocation(programObjectId, U_MATRIX)
+//        // 不适用 stride 的情况
+//        vertexData.position(0)
+//        GLES20.glVertexAttribPointer(
+//            aPositionLocation,
+//            POSITION_COMPONENT_COUNT,
+//            GLES20.GL_FLOAT,
+//            false,
+//            0,
+//            vertexData
+//        )
         vertexData.position(0)
-        GLES20.glVertexAttribPointer(
-            aPositionLocation,
-            POSITION_COMPONENT_COUNT,
-            GLES20.GL_FLOAT,
-            false,
-            0,
-            vertexData
-        )
+        GLES20.glVertexAttribPointer(aPositionLocation , POSITION_COMPONENT_COUNT , GLES20.GL_FLOAT , false , STRIDE , vertexData)
         GLES20.glEnableVertexAttribArray(aPositionLocation)
+
+//        vertexData.position(POSITION_COMPONENT_COUNT)
+//        GLES20.glVertexAttribPointer(aColorLocation , COLOR_COMPONENT_COUNT , GLES20.GL_FLOAT , false , STRIDE , vertexData)
+//        GLES20.glEnableVertexAttribArray(aColorLocation)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -105,18 +117,18 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
 
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
-        GLES20.glUniformMatrix4fv(uMatrixLocation , 1 , false , projectionMatrix , 0)
+//        GLES20.glUniformMatrix4fv(uMatrixLocation , 1 , false , projectionMatrix , 0)
         // 绘制桌子
         GLES20.glUniform4f(uColorPositionLocation, 1.0f, 1.0f, 1.0f, 1.0f)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 6)
         // 绘制分割线
-        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 0.0f, 0.0f, 1.0f)
+//        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 0.0f, 0.0f, 1.0f)
         GLES20.glDrawArrays(GLES20.GL_LINES, 6, 2)
 
-        GLES20.glUniform4f(uColorPositionLocation, 0.0f, 0.0f, 1.0f, 1.0f)
+//        GLES20.glUniform4f(uColorPositionLocation, 0.0f, 0.0f, 1.0f, 1.0f)
         GLES20.glDrawArrays(GLES20.GL_POINTS, 8, 1)
 
-        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 0.0f, 0.0f, 1.0f)
+//        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 0.0f, 0.0f, 1.0f)
         GLES20.glDrawArrays(GLES20.GL_POINTS, 9, 1)
     }
 }

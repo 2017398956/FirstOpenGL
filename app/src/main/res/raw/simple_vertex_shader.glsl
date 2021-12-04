@@ -3,7 +3,9 @@
 attribute vec4 a_Position;
 // 用于设置渐变色
 attribute vec4 a_Color;
+
 uniform mat4 u_Matrix;
+varying vec4 v_Color;
 
 void main(){
     v_Color = a_Color;

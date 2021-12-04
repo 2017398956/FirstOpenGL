@@ -93,9 +93,9 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
         GLES20.glVertexAttribPointer(aPositionLocation , POSITION_COMPONENT_COUNT , GLES20.GL_FLOAT , false , STRIDE , vertexData)
         GLES20.glEnableVertexAttribArray(aPositionLocation)
 
-//        vertexData.position(POSITION_COMPONENT_COUNT)
-//        GLES20.glVertexAttribPointer(aColorLocation , COLOR_COMPONENT_COUNT , GLES20.GL_FLOAT , false , STRIDE , vertexData)
-//        GLES20.glEnableVertexAttribArray(aColorLocation)
+        vertexData.position(POSITION_COMPONENT_COUNT)
+        GLES20.glVertexAttribPointer(aColorLocation , COLOR_COMPONENT_COUNT , GLES20.GL_FLOAT , false , STRIDE , vertexData)
+        GLES20.glEnableVertexAttribArray(aColorLocation)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -119,7 +119,7 @@ class AirHockeyRenderer : GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 //        GLES20.glUniformMatrix4fv(uMatrixLocation , 1 , false , projectionMatrix , 0)
         // 绘制桌子
-        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 1.0f, 1.0f, 1.0f)
+//        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 1.0f, 1.0f, 1.0f)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 6)
         // 绘制分割线
 //        GLES20.glUniform4f(uColorPositionLocation, 1.0f, 0.0f, 0.0f, 1.0f)

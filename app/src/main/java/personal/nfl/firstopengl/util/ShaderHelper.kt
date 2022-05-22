@@ -22,16 +22,17 @@ class ShaderHelper {
             GLES20.glShaderSource(shaderObjectId , shaderCode)
             GLES20.glCompileShader(shaderObjectId)
             LogUtil.d("Results of compiling source:\n$shaderCode\n:${GLES20.glGetShaderInfoLog(shaderObjectId)}")
-            val vertexShaderStatus = IntArray(1)
+            val shaderStatus = IntArray(1)
             GLES20.glGetShaderiv(
                 shaderObjectId,
                 GLES20.GL_COMPILE_STATUS,
-                vertexShaderStatus,
+                shaderStatus,
                 0
             )
-            if (vertexShaderStatus[0] == 0){
-                GLES20.glDeleteShader(shaderObjectId)
+            if (shaderStatus[0] == 0){
                 LogUtil.e("Compilation of shader failed")
+                LogUtil.e("compileShaderFailed:${GLES20.glGetShaderInfoLog(shaderObjectId)}")
+                GLES20.glDeleteShader(shaderObjectId)
                 return 0
             }
             return shaderObjectId

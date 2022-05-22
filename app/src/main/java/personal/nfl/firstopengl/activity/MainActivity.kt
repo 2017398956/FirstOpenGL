@@ -1,11 +1,11 @@
 package personal.nfl.firstopengl.activity
 
 import android.opengl.GLSurfaceView
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import personal.nfl.firstopengl.renderers.AirHockeyRenderer
-import personal.nfl.firstopengl.renderers.FirstRenderer
+import personal.nfl.firstopengl.renderers.AirHockeyWithImageRenderer
 import personal.nfl.firstopengl.util.PhoneInfo
 
 class MainActivity : AppCompatActivity() {
@@ -16,11 +16,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glSurfaceView = GLSurfaceView(this)
+        glSurfaceView.keepScreenOn = true
         // 当模拟器选择使用 OpenGL 后，但不能正确运行可以加上下面的配置试试
         // glSurfaceView.setEGLConfigChooser(8 , 8 , 8 , 8 , 16 , 0)
         if (PhoneInfo.supportES2(this)){
             glSurfaceView.setEGLContextClientVersion(2)
-            glSurfaceView.setRenderer(AirHockeyRenderer())
+//            glSurfaceView.setRenderer(AirHockeyRenderer())
+            glSurfaceView.setRenderer(AirHockeyWithImageRenderer(this))
             rendererSet = true
         }else{
             Toast.makeText(this , "不支持 OPENGL ES2.0" , Toast.LENGTH_SHORT).show()
